@@ -22,7 +22,7 @@ output:
 
 # Introduction
 
-This document illustrates how to use the \code{LAGFF} package.
+This document illustrates how to use the `LAGFF` package.
 
 # Get IMDb Dataset
 
@@ -53,7 +53,7 @@ movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,
 
 # LAGFF Algorithm
 
-Next, we run the \code{LAGFF} algorithm.
+Next, we run the `LAGFF` algorithm.
 
 ```{r}
 require(LAGFF, quietly = T)
