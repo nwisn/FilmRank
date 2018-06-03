@@ -4,12 +4,6 @@ author: Nicholas Wisniewski
 date: June 2, 2018
 output:
   html_document:
-    toc: true
-    toc_depth: 4
-    toc_float: true
-    collapsed: true
-    number_sections: false
-    theme: cosmo
     df_print: paged
 ---
 
@@ -29,6 +23,7 @@ This document illustrates how to use the `LAGFF` package.
 First, we get a range voting dataset from IMDb.
 
 ```{r}
+require(LAGFFRank, quietly = T)
 require(ggplot2movies, quietly = T)
 require(reshape2, quietly = T)
 set.seed(137)
