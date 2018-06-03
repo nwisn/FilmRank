@@ -13,6 +13,9 @@ output:
     df_print: paged
 ---
 
+<!-- \VignetteEngine{knitr::knitr} -->
+
+
 # Introduction
 
 This document illustrates how to use the \code{LAGFF} package.
