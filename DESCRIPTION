@@ -1,7 +1,7 @@
-Package: LAGFF
+Package: LAGFFRank
 Type: Package
 Title: LAGFF Ranking Algorithm
-Version: 0.1.0
+Version: 1.0.0
 Author: Nicholas Wisniewski
 Maintainer: Nicholas Wisniewski <dr.nick.wisniewski@gmail.com>
 Description: The range voting ranking system used by the Los Angeles Greek Film Festival (LAGFF)
