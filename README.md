@@ -11,8 +11,8 @@ This ranking system was adopted by LAGFF to address a problem in estimating rank
 ### How are the results different?
 This method is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. 
 
-### How can I get the algorithm?
-The algorithm exists as an R package, and can be installed from [github](https://github.com/nwisn/LAGFFRank) by typing the following commands into R:
+### How do I use the algorithm?
+The algorithm currently only exists as an R package, which can be installed from [github](https://github.com/nwisn/LAGFFRank) by typing the following commands into R:
 
 `install.packages("devtools")`
 
