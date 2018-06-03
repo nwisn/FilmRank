@@ -35,7 +35,7 @@ set.seed(137)
 
 # get a subset of IMDb movies
 movies.subgroups <- movies$year == 2003 & movies$votes < 100 & movies$votes > 10 # make some cuts
-subsample.ix <- sample(1:sum(movies.subgroups), 50, replace = F) # subsample 40 films
+subsample.ix <- sample(1:sum(movies.subgroups), 50, replace = F) # subsample 50 films
 movies.selection <- movies[movies.subgroups,][subsample.ix,]
 
 # reshape the genre columns 
