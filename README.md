@@ -14,6 +14,8 @@ This method is asymptotically equivalent to the naive ordering -- in the limit w
 ### How can I get the algorithm?
 The algorithm exists as an R package, and can be installed from [github](https://github.com/nwisn/LAGFFRank) by typing the following commands into R:
 
+`install.packages("devtools")`
+
 `library(devtools)`
 
 `install_github("nwisn/LAGFFRank", build_vignettes = TRUE)`
