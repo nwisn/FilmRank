@@ -20,7 +20,7 @@ The algorithm currently only exists as an R package, which can be installed from
 
 `install_github("nwisn/LAGFFRank", build_vignettes = TRUE)`
 
-An example use case can be found by typing:
+An example use case can be found [here](https://github.com/nwisn/LAGFFRank/blob/master/vignettes/LAGFFRank.Rmd), and by typing:
 
 `vignette("LAGFFRank")`
 
