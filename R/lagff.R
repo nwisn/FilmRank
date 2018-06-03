@@ -1,6 +1,6 @@
 #' Compute LAGFF rankings
 #'
-#' \code{LAGFF} computes LAGFF rankings.
+#' \code{LAGFF} computes range voting rankings for the Los Angeles Greek Film Festival..
 #'
 #' @param csv dataframe; from \code{read.csv}
 #' @param title.colname string; specifying the \code{csv} column name containing film titles
@@ -18,6 +18,14 @@
 #'
 #' This method is asymptotically equivalent to the naive ordering – in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. However, as a side effect, the relative ranking of two particular films becomes dependent on their relative rankings with all of the other films. For this reason, the ranking within a subgroup of films may end up slightly differing from their relative ranking in the context of all the films.
 #'
+#' @return an object of class \code{LAGFF}, which is a list with elements for
+#' \itemize{
+#'   \item \code{adj} : the adjacency matrix
+#'   \item \code{g} : an igraph graph object
+#'   \item \code{data} : a dataframe with vote counts, mean, 95% CI, and authority score
+#'   \item elements that are passthrough copies of the inputs arguments
+#' }
+#'
 #' @export
 LAGFF <- function(csv,
                   title.colname = "FILM",
@@ -32,7 +40,7 @@ LAGFF <- function(csv,
     require(igraph)
     if(!is.null(seed)) set.seed(seed)
 
-    source(file.path("~/Documents/LAGFF/R","functions.R"))
+    #source(file.path("~/Documents/LAGFF/R","functions.R"))
     data <- cleandata(csv,
                       votethresh = minvote-1,
                       vote.colnames = vote.colnames,

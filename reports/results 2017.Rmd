@@ -15,15 +15,15 @@ output:
     
 ---
 <script>
-  $(document).ready(function() {
-    $('#TOC').parent().prepend('<div id=\"nav_logo\"><img src=\"http://lagff.org/wp-content/uploads/lagff_logo_home.png"></div>');
-  });
+$(document).ready(function() {
+$('#TOC').parent().prepend('<div id=\"nav_logo\"><img src=\"http://lagff.org/wp-content/uploads/lagff_logo_home.png"></div>');
+});
 </script>
 
 <style>
 #nav_logo {
-  width: 100%;
-  margin-top: 40px;
+width: 100%;
+margin-top: 40px;
 }
 </style>
 
@@ -31,10 +31,11 @@ output:
 The [Los Angeles Greek Film Festival](http://lagff.org/) (LAGFF) presents an Audience Choice award to films based on the ranking of votes. The voting is a 5-star range system, where audience members can give a film an integer score between 1 and 5. An [authority score](#algorithm) is then used to rank the films. Below are the results for 2017.
 
 ```{r libraries, echo = F}
+suppressMessages(require(LAGFF))
 suppressMessages(require(knitr))
 suppressMessages(require(kableExtra))
 suppressMessages(require(ggsci))
-suppressMessages(source(file.path("~/Documents/LAGFF/R", "lagff.R")))
+#suppressMessages(source(file.path("~/Documents/LAGFF/R", "lagff.R")))
 ```
 
 
@@ -58,14 +59,14 @@ minvote <- 2
 #______________________________________
 # run analysis
 run <- suppressWarnings(suppressMessages(LAGFF(csv,
-                              title.colname = title.colname,
-                              type.colname = type.colname,
-                              vote.colnames = vote.colnames,
-                              score = score,
-                              nboot = nboot,
-                              minvote = minvote,
-                              seed = 137,
-                              ncores = NULL)
+                                               title.colname = title.colname,
+                                               type.colname = type.colname,
+                                               vote.colnames = vote.colnames,
+                                               score = score,
+                                               nboot = nboot,
+                                               minvote = minvote,
+                                               seed = 137,
+                                               ncores = NULL)
 ))
 ```
 
@@ -87,12 +88,12 @@ kable(this_table,
       row.names = T, 
       col.names = c("FILM","TYPE", "VOTES", "AVG", "AUTHORITY"),
       caption = "Overall Rankings") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 14) %>%
-  row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
-  row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
-  row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
-  scroll_box(width = "100%", height = "300px")
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                  font_size = 14) %>%
+    row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
+    row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
+    row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
+    scroll_box(width = "100%", height = "300px")
 ```
 
 
@@ -114,7 +115,7 @@ if(length(filmtypes) > 1){
     data.subs <- NULL
 }
 
-    
+
 ```
 
 ## Feature Films
@@ -149,21 +150,21 @@ if(is.null(data.subs)){
 if(is.null(data.subs)){
     print("This category is not listed.")
 } else if("D" %in% names(data.subs)){
-this_table <- data.subs[["D"]][order(data.subs[["D"]]$authority, decreasing = T),
-                                        c("FILM", "TYPE", "Total", "mean", "authority")]
-rownames(this_table) <- as.character(1:nrow(this_table))
-
-kable(this_table, 
-      digits = 3,
-      row.names = T, 
-      col.names = c("FILM","TYPE", "VOTES", "AVG", "AUTHORITY"),
-      caption = "Documentary Rankings") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 14) %>%
-  row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
-  row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
-  row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
-  scroll_box(width = "100%", height = "300px")
+    this_table <- data.subs[["D"]][order(data.subs[["D"]]$authority, decreasing = T),
+                                   c("FILM", "TYPE", "Total", "mean", "authority")]
+    rownames(this_table) <- as.character(1:nrow(this_table))
+    
+    kable(this_table, 
+          digits = 3,
+          row.names = T, 
+          col.names = c("FILM","TYPE", "VOTES", "AVG", "AUTHORITY"),
+          caption = "Documentary Rankings") %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                      font_size = 14) %>%
+        row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
+        row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
+        row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
+        scroll_box(width = "100%", height = "300px")
 }
 ```
 
@@ -173,21 +174,21 @@ kable(this_table,
 if(is.null(data.subs)){
     print("This category is not listed.")
 } else if("S" %in% names(data.subs)){
-this_table <- data.subs[["S"]][order(data.subs[["S"]]$authority, decreasing = T),
-                                        c("FILM", "TYPE", "Total", "mean", "authority")]
-rownames(this_table) <- as.character(1:nrow(this_table))
-
-kable(this_table, 
-      digits = 3,
-      row.names = T, 
-      col.names = c("FILM","TYPE", "VOTES", "AVG", "AUTHORITY"),
-      caption = "Short Film Rankings") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-                font_size = 14) %>%
-  row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
-  row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
-  row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
-  scroll_box(width = "100%", height = "300px")
+    this_table <- data.subs[["S"]][order(data.subs[["S"]]$authority, decreasing = T),
+                                   c("FILM", "TYPE", "Total", "mean", "authority")]
+    rownames(this_table) <- as.character(1:nrow(this_table))
+    
+    kable(this_table, 
+          digits = 3,
+          row.names = T, 
+          col.names = c("FILM","TYPE", "VOTES", "AVG", "AUTHORITY"),
+          caption = "Short Film Rankings") %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                      font_size = 14) %>%
+        row_spec(which(this_table$TYPE == "F"), bold = F, color = "#CE3D32FF") %>%
+        row_spec(which(this_table$TYPE == "D"), bold = F, color = "#5050FFFF") %>%
+        row_spec(which(this_table$TYPE == "S"), bold = F, color = "#749B58FF") %>%
+        scroll_box(width = "100%", height = "300px")
 }
 ```
 
@@ -198,18 +199,16 @@ We visualized the ranking system using a forest plot. The average vote is depict
 ```{r forestplot, echo = F, fig.height = 9, fig_retina=2 }
 # plot overall ranking
 suppressMessages(
-plot.LAGFF(run,
-           rankmetric = "authority",
-           color.palette = pal_igv,
-           title.colname = title.colname,
-           type.colname = type.colname,
-           cex.label = 0.75,
-           xlim = c(1,5),
-           cex.xlab = 1,
-           cex.ticks = 0.75,
-           boxsize = 1/200,
-           new_page = T,
-           title = "")
+    plot(run,
+         rankmetric = "authority",
+         color.palette = pal_igv,
+         cex.label = 0.75,
+         xlim = c(1,5),
+         cex.xlab = 1,
+         cex.ticks = 0.75,
+         boxsize = 1/200,
+         new_page = T,
+         title = "")
 )
 ```
 
