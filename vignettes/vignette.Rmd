@@ -13,7 +13,11 @@ output:
     df_print: paged
 ---
 
-<!-- \VignetteEngine{knitr::knitr} -->
+<!-- 
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{LAGFFRank}
+  %\usepackage[utf8]{inputenc}
+-->
 
 
 # Introduction
