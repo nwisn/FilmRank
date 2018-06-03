@@ -26,7 +26,7 @@ LAGFF(csv, title.colname = "FILM", type.colname = "TYPE",
 
 \item{seed}{integer; random seed for reproducibility}
 
-\item{ncores;}{number of cores used for parallel computing}
+\item{ncores}{number of cores used for parallel computing}
 }
 \value{
 an object of class \code{LAGFF}, which is a list with elements for
