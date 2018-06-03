@@ -28,8 +28,17 @@ LAGFF(csv, title.colname = "FILM", type.colname = "TYPE",
 
 \item{ncores;}{number of cores used for parallel computing}
 }
+\value{
+an object of class \code{LAGFF}, which is a list with elements for
+\itemize{
+  \item \code{adj} : the adjacency matrix
+  \item \code{g} : an igraph graph object
+  \item \code{data} : a dataframe with vote counts, mean, 95% CI, and authority score
+  \item elements that are passthrough copies of the inputs arguments
+}
+}
 \description{
-\code{LAGFF} computes LAGFF rankings.
+\code{LAGFF} computes range voting rankings for the Los Angeles Greek Film Festival..
 }
 \details{
 The LAGFF ranking algorithm bootstraps the probability that the average score \eqn{μ_i} of film i is truly greater than any other film j, by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities \eqn{p_{ij}=p(μ_j>μ_i)} is then treated as a weighted directed graph, and the authority score \eqn{eig_1(p^Tp)} is used to rank the films, in a way similar to Google page-rank. This is computed using \code{\link[igraph]{authority.score}}.

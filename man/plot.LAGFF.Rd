@@ -4,11 +4,40 @@
 \alias{plot.LAGFF}
 \title{Plot LAGFF rankings}
 \usage{
-\method{plot}{LAGFF}(lagff.obj, rankmetric = "authority", color.palette,
-  color.alpha = 1, title.colname, type.colname, title = NULL,
+\method{plot}{LAGFF}(lagff.obj, rankmetric = "authority",
+  color.palette = pal_igv, color.alpha = 1, title = NULL,
   cex.label = 0.5, xlim = c(1, 5), cex.xlab = 1, cex.ticks = 0.5,
   boxsize = 1/200, boxcolor = "darkblue", new_page = TRUE, grid = TRUE,
   xticks = seq(1, 5, by = 1))
+}
+\arguments{
+\item{lagff.obj}{a result returned by \code{LAGFF}}
+
+\item{rankmetric}{string; metric by which to rank films. One of 'authority', 'hub', 'degree', 'mean'.}
+
+\item{color.palette}{string of colors, or ggsci palette generator function}
+
+\item{color.alpha}{number between 0 and 1 specifying the transparency of the colors}
+
+\item{title}{string; title of the plot}
+
+\item{cex.label}{number specifying the size of the row labels}
+
+\item{xlim}{range specifying the x-axis limits}
+
+\item{cex.xlab}{number specifying the size of the x-axis label}
+
+\item{cex.ticks}{number specifying the size of the ticks}
+
+\item{boxsize}{number specifying the size of the boxes}
+
+\item{boxcolor}{string specifying the color of the boxes}
+
+\item{new_page}{logical; whether to make figure from a new page}
+
+\item{grid}{logical; whether to include grid lines}
+
+\item{xticks}{sequence specifying the x-axis ticks}
 }
 \description{
 \code{plot.LAGFF} creates a forest plot of LAGFF rankings.
