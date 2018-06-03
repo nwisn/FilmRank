@@ -24,6 +24,10 @@ An example use case can be found by typing:
 
 `vignette("LAGFFRank")`
 
+and further help can be found by typing:
+
+`?LAGFF`
+
 
 # References
 [[1](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908)] Kleinberg, J. M. (1999). Authoritative sources in a hyperlinked environment. *Journal of the ACM (JACM)*, 46(5), 604-632.
