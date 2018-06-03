@@ -45,7 +45,7 @@ bootmeans <- function(votes.list,
                      nboot = 10000,
                      ncores = NULL
                      ){
-    require(parallel)
+    require(parallel, quietly = T)
     if(is.null(ncores)) ncores <- detectCores()-1
     meanvotes.boot.list <- mclapply(1:nboot, function(i){
         boot.votes.list <- lapply(votes.list, function(this_film){

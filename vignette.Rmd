@@ -5,10 +5,17 @@ output:
     df_print: paged
 ---
 
+# Introduction
+
+This document illustrates how to use the \code{LAGFF} package.
+
+# Get IMDb Dataset
+
+First, we get a range voting dataset from IMDb.
 
 ```{r}
-require(ggplot2movies)
-require(reshape2)
+require(ggplot2movies, quietly = T)
+require(reshape2, quietly = T)
 set.seed(137)
 
 # get a subset of IMDb movies
@@ -26,22 +33,23 @@ movies.unique <- do.call(rbind, lapply(split(movies.melt, movies.melt$title), fu
 
 # transform percentile vote columns r1-r10 into counts
 movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,c(7:16)]) * movies.unique$votes)
-movies.unique
 ```
 
 
+# LAGFF Algorithm
 
+Next, we run the \code{LAGFF} algorithm.
 
 ```{r}
-require(LAGFF)
-run <- LAGFF(movies.unique, 
+require(LAGFF, quietly = T)
+run <-LAGFF(movies.unique, 
       title.colname = "title", 
       type.colname = "type", 
       vote.colnames = paste0("r", 1:10),
       score = function(x) mean(x, trim = 0),
       nboot = 100)
+
 summary(run)
 plot(run, rankmetric = "authority")
-plot(run, rankmetric = "mean")
 ```
 

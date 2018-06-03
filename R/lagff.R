@@ -69,7 +69,7 @@ LAGFF <- function(csv,
                   seed = 137,
                   ncores = NULL
                   ){
-    require(igraph)
+    require(igraph, quietly = T)
     if(!is.null(seed)) set.seed(seed)
 
     #source(file.path("~/Documents/LAGFF/R","functions.R"))
@@ -175,7 +175,7 @@ plot.LAGFF <- function(lagff.obj,
                        grid = TRUE,
                        xticks = NULL
 ){
-    require(forestplot)
+    require(forestplot, quietly = T)
     data <- lagff.obj[["data"]]
     title.colname <- lagff.obj[["title.colname"]]
     type.colname <- lagff.obj[["type.colname"]]
@@ -188,7 +188,7 @@ plot.LAGFF <- function(lagff.obj,
     colors = factor(data[[type.colname]])
     colors <- colors[order(data[[rankmetric]], decreasing = TRUE)]
     if(is.null(color.palette)){
-        require(ggsci)
+        require(ggsci, quietly = T)
         levels(colors) <-  pal_igv(alpha = color.alpha)(nlevels(colors))
     }
     if(class(color.palette) == "function"){
