@@ -48,10 +48,17 @@ bootmeans <- function(votes.list,
     require(parallel)
     if(is.null(ncores)) ncores <- detectCores()-1
     meanvotes.boot.list <- mclapply(1:nboot, function(i){
-        boot.votes.list <- lapply(votes.list, function(this_film)
-            sample(this_film$VOTE, replace = TRUE))
-        boot.meanvotes <- sapply(boot.votes.list, function(this_film)
-            FUN(this_film))
+        boot.votes.list <- lapply(votes.list, function(this_film){
+            if(nboot > 1){
+                sample(this_film$VOTE, replace = TRUE)
+            } else {
+                this_film$VOTE # skip the bootstrap if nboot = 1
+            }
+        })
+        boot.meanvotes <- sapply(boot.votes.list, function(this_film){
+            FUN(this_film)
+        })
+
         return(boot.meanvotes)
     }, mc.cores = ncores)
     return(meanvotes.boot.list)

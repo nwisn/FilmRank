@@ -18,13 +18,45 @@
 #'
 #' This method is asymptotically equivalent to the naive ordering – in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. However, as a side effect, the relative ranking of two particular films becomes dependent on their relative rankings with all of the other films. For this reason, the ranking within a subgroup of films may end up slightly differing from their relative ranking in the context of all the films.
 #'
-#' @return an object of class \code{LAGFF}, which is a list with elements for
+#' @return an object of class \code{LAGFF}, which is a list with elements:
 #' \itemize{
 #'   \item \code{adj} : the adjacency matrix
 #'   \item \code{g} : an igraph graph object
-#'   \item \code{data} : a dataframe with vote counts, mean, 95% CI, and authority score
-#'   \item elements that are passthrough copies of the inputs arguments
+#'   \item \code{data} : a dataframe with the data and the authority score
+#'   \item other elements that are pass-through copies of the inputs arguments
 #' }
+#'
+#' @example
+#' require(ggplot2movies)
+#' require(reshape2)
+#' set.seed(137)
+#'
+#' # get a subset of IMDb movies
+#' movies.subgroups <- movies$year == 2003 & movies$votes < 100 & movies$votes > 10 # make some cuts
+#' subsample.ix <- sample(1:sum(movies.subgroups), 60, replace = F) # subsample 40 films
+#' movies.selection <- movies[movies.subgroups,][subsample.ix,]
+#'
+#' # reshape the genre columns
+#' movies.melt0 <- melt(movies.selection,
+#'                      id.vars = colnames(movies)[1:17],
+#'                      variable.name = "type",
+#'                      value.name = "type.yes")
+#' movies.melt <- movies.melt0[movies.melt0$type.yes == 1,]
+#' movies.unique <- do.call(rbind, lapply(split(movies.melt, movies.melt$title), function(x) x[1,]))
+#'
+#' # transform percentile vote columns r1-r10 into counts
+#' movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,c(7:16)]) * movies.unique$vote#' s)
+#'
+#' # run LAGFF
+#' run <- LAGFF(movies.unique,
+#'              title.colname = "title",
+#'              type.colname = "type",
+#'              vote.colnames = paste0("r", 1:10),
+#'              score = function(x) mean(x, trim = 0),
+#'              nboot = 100)
+#' summary(run)
+#' plot(run, rankmetric = "authority")
+#' plot(run, rankmetric = "mean")
 #'
 #' @export
 LAGFF <- function(csv,
@@ -130,23 +162,24 @@ summary.LAGFF <- function(lagff.obj){
 #' @export
 plot.LAGFF <- function(lagff.obj,
                        rankmetric = "authority",
-                       color.palette = pal_igv,
+                       color.palette = NULL,
                        color.alpha = 1,
                        title = NULL,
                        cex.label = 0.5,
-                       xlim = c(1,5),
+                       xlim = NULL,
                        cex.xlab = 1,
                        cex.ticks = 0.5,
                        boxsize = 1/200,
                        boxcolor = "darkblue",
                        new_page = TRUE,
                        grid = TRUE,
-                       xticks = seq(1,5,by=1)
+                       xticks = NULL
 ){
     require(forestplot)
     data <- lagff.obj[["data"]]
     title.colname <- lagff.obj[["title.colname"]]
     type.colname <- lagff.obj[["type.colname"]]
+    vote.colnames <- lagff.obj[["vote.colnames"]]
 
     if(is.null(data[[rankmetric]])) stop("ERROR 17: the rankmetric specified doesn't exist in data.
                                          Must be one of: authority, hub, degree, mean. ")
@@ -154,8 +187,11 @@ plot.LAGFF <- function(lagff.obj,
     # choose colors
     colors = factor(data[[type.colname]])
     colors <- colors[order(data[[rankmetric]], decreasing = TRUE)]
-    if(class(color.palette) == "function"){
+    if(is.null(color.palette)){
         require(ggsci)
+        levels(colors) <-  pal_igv(alpha = color.alpha)(nlevels(colors))
+    }
+    if(class(color.palette) == "function"){
         levels(colors) <- color.palette(alpha = color.alpha)(nlevels(colors))
     } else if(class(color.palette) == "character"){
         levels(colors) <- color.palette[1:nlevels(colors)]
@@ -167,8 +203,8 @@ plot.LAGFF <- function(lagff.obj,
     rankeddata <- data[order(data[[rankmetric]], decreasing = TRUE),]
     tabletext <- cbind(
         c("Rank", 1:nrow(rankeddata)),
-        c("Film", as.character(rankeddata[[title.colname]]))
-        #c("Type", as.character(rankeddata[[type.colname]])),
+        c("Film", as.character(rankeddata[[title.colname]])),
+        c("Type", as.character(rankeddata[[type.colname]]))
         #c("N", as.character(rankeddata$Total)),
         #c("Avg", round(rankeddata[["mean"]],2)),
         #c("Graph", round(rankeddata[["hubscore"]],3))
@@ -181,6 +217,8 @@ plot.LAGFF <- function(lagff.obj,
         row.names = c(NA, as.character(rankeddata[[title.colname]])),
         class = "data.frame")
 
+    if(is.null(xlim)) xlim <- c(min(rankeddata[["mean.lower"]]),max(rankeddata[["mean.upper"]]))
+    if(is.null(xticks)) xticks <- seq(floor(xlim[1]),ceiling(xlim[2]), by=1)
     forestplot(
         tabletext,
         struct,
