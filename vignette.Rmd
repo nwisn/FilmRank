@@ -1,7 +1,15 @@
 ---
 title: "LAGFF Vignette"
+author: Nicholas Wisniewski
+date: June 2, 2018
 output:
   html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    collapsed: true
+    number_sections: false
+    theme: cosmo
     df_print: paged
 ---
 
@@ -42,14 +50,15 @@ Next, we run the \code{LAGFF} algorithm.
 
 ```{r}
 require(LAGFF, quietly = T)
-run <-LAGFF(movies.unique, 
+suppressMessages(run <-LAGFF(movies.unique, 
       title.colname = "title", 
       type.colname = "type", 
       vote.colnames = paste0("r", 1:10),
       score = function(x) mean(x, trim = 0),
       nboot = 100)
+)
 
 summary(run)
-plot(run, rankmetric = "authority")
+suppressMessages(plot(run, rankmetric = "authority"))
 ```
 

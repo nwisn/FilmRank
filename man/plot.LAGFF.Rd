@@ -5,10 +5,9 @@
 \title{Plot LAGFF rankings}
 \usage{
 \method{plot}{LAGFF}(lagff.obj, rankmetric = "authority",
-  color.palette = pal_igv, color.alpha = 1, title = NULL,
-  cex.label = 0.5, xlim = c(1, 5), cex.xlab = 1, cex.ticks = 0.5,
-  boxsize = 1/200, boxcolor = "darkblue", new_page = TRUE, grid = TRUE,
-  xticks = seq(1, 5, by = 1))
+  color.palette = NULL, color.alpha = 1, title = NULL, cex.label = 0.5,
+  xlim = NULL, cex.xlab = 1, cex.ticks = 0.5, boxsize = 1/200,
+  boxcolor = "darkblue", new_page = TRUE, grid = TRUE, xticks = NULL)
 }
 \arguments{
 \item{lagff.obj}{a result returned by \code{LAGFF}}
