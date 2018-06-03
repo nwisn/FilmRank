@@ -10,7 +10,7 @@
 #' @param nboot integer; number of bootstrap resamples
 #' @param minvote integer; minimum number of votes required to be in rankings
 #' @param seed integer; random seed for reproducibility
-#' @param ncores; number of cores used for parallel computing
+#' @param ncores number of cores used for parallel computing
 #'
 #' @details The LAGFF ranking algorithm bootstraps the probability that the average score \eqn{μ_i} of film i is truly greater than any other film j, by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities \eqn{p_{ij}=p(μ_j>μ_i)} is then treated as a weighted directed graph, and the authority score \eqn{eig_1(p^Tp)} is used to rank the films, in a way similar to Google page-rank. This is computed using \code{\link[igraph]{authority.score}}.
 #'
