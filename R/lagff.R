@@ -26,8 +26,7 @@
 #'   \item other elements that are pass-through copies of the inputs arguments
 #' }
 #'
-#' @example
-#' require(ggplot2movies)
+#' @examples require(ggplot2movies)
 #' require(reshape2)
 #' set.seed(137)
 #'
