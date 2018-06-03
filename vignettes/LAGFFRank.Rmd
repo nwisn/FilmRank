@@ -16,7 +16,7 @@ output:
 
 # Introduction
 
-This document illustrates how to use the `LAGFF` package.
+This document illustrates how to use the `LAGFFRank` package.
 
 # Get IMDb Dataset
 
