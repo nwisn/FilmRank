@@ -23,7 +23,6 @@ This document illustrates how to use the `FilmRank` package.
 First, we get a range voting dataset from IMDb.
 
 ```{r}
-require(LAGFFRank, quietly = T)
 require(ggplot2movies, quietly = T)
 require(reshape2, quietly = T)
 set.seed(137)
@@ -51,8 +50,8 @@ movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,
 Next, we run the `filmrank` algorithm.
 
 ```{r}
-require(LAGFFRank, quietly = T)
-suppressMessages(run <-filmrank(movies.unique, 
+require(FilmRank, quietly = T)
+suppressMessages(run <- filmrank(movies.unique, 
       title.colname = "title", 
       type.colname = "type", 
       vote.colnames = paste0("r", 1:10),

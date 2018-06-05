@@ -36,6 +36,7 @@ an object of class \code{LAGFF}, which is a list with elements:
   \item \code{data} : a dataframe with the data and the authority score
   \item other elements that are pass-through copies of the inputs arguments
 }
+#'
 }
 \description{
 \code{filmrank} computes range voting rankings.
@@ -50,11 +51,12 @@ This method is asymptotically equivalent to the naive ordering – in the limit 
 \examples{
 require(ggplot2movies)
 require(reshape2)
+require(FilmRank)
 set.seed(137)
 
 # get a subset of IMDb movies
 movies.subgroups <- movies$year == 2003 & movies$votes < 100 & movies$votes > 10 # make some cuts
-subsample.ix <- sample(1:sum(movies.subgroups), 60, replace = F) # subsample 40 films
+subsample.ix <- sample(1:sum(movies.subgroups), 60, replace = FALSE) # subsample 40 films
 movies.selection <- movies[movies.subgroups,][subsample.ix,]
 
 # reshape the genre columns
@@ -66,7 +68,7 @@ movies.melt <- movies.melt0[movies.melt0$type.yes == 1,]
 movies.unique <- do.call(rbind, lapply(split(movies.melt, movies.melt$title), function(x) x[1,]))
 
 # transform percentile vote columns r1-r10 into counts
-movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,c(7:16)]) * movies.unique$vote#' s)
+movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,c(7:16)]) * movies.unique$votes)
 
 # run FilmRank
 run <- filmrank(movies.unique,
