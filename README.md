@@ -19,7 +19,7 @@ The algorithm currently only exists as an [R](https://www.r-project.org/) packag
 
 `install_github("nwisn/FilmRank", build_vignettes = TRUE)`
 
-An [example usage](https://nwisn.github.io/LAGFFRank/results_IMDb.html) exists on publicly-available IMDb voting data, and more information can be found by typing:
+An [example usage](https://nwisn.github.io/FilmRank/results_IMDb.html) exists on publicly-available IMDb voting data, and more information can be found by typing:
 
 `vignette("FilmRank")`
 
