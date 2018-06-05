@@ -1,8 +1,8 @@
-# FilmRank Algorithm
+# Background
 
 Film festivals present an Audience Choice award to films based on the ranking of votes. The voting is typically a 5-star range system, where audience members can give a film an integer score between 1 and 5. An algorithm is then used to rank the films. But what's a good algorithm?
 
-# The Method
+# The FilmRank algorithm
 The FilmRank ranking algorithm bootstraps the probability that the average score $\mu_i$ of film $i$ is truly greater than any other film $j$, by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities $p_{ij}=p(\mu_j \gt \mu_i)$ is then treated as a weighted directed graph, and the [authority score](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908) $\text{eig}_1(p^Tp)$ is used to rank the films, in a way similar to Google *page-rank*.
 
 ### Why use this method?
