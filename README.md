@@ -8,7 +8,7 @@ The FilmRank ranking algorithm bootstraps the probability that the average score
 This ranking system was designed to address a problem in estimating ranks introduced by the wide range of audience sizes at a film festival. Specifically, ranking based on naive ordering the mean scores can produce undesirable results. For example, a high scoring film that many people came to see (opening/closing night) can sometimes be beaten by a film that very few people came to see, but which also scored highly, only because of the increased sampling error in the small group. The FilmRank algorithm addresses this problem by using resampling to weigh the relative superiority of each film to every other, which can then produce more meaningful rankings using graph theory.
 
 ### How are the results different?
-This method is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. 
+This method is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. For a more detailed look at this, [see this example](https://nwisn.github.io/FilmRank/results_IMDb.html).
 
 ### How do I use the algorithm?
 The algorithm currently only exists as an [R](https://www.r-project.org/) package, which can be installed from [github](https://github.com/nwisn/FilmRank) by typing the following commands into R:
