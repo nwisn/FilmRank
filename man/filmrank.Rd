@@ -29,14 +29,13 @@ filmrank(csv, title.colname = "FILM", type.colname = "TYPE",
 \item{ncores}{number of cores used for parallel computing}
 }
 \value{
-an object of class \code{LAGFF}, which is a list with elements:
+an object of class \code{FilmRank}, which is a list with elements:
 \itemize{
   \item \code{adj} : the adjacency matrix
   \item \code{g} : an igraph graph object
   \item \code{data} : a dataframe with the data and the authority score
   \item other elements that are pass-through copies of the inputs arguments
 }
-#'
 }
 \description{
 \code{filmrank} computes range voting rankings.
@@ -47,38 +46,4 @@ The FilmRank ranking algorithm bootstraps the probability that the average score
 This ranking system was designed to address a problem in estimating ranks introduced by the wide range of audience sizes at a film festival. Specifically, ranking based on naive ordering the mean scores can produce undesirable results. For example, a high scoring film that many people came to see (opening/closing night) can sometimes be beaten by a film that very few people came to see, but which also scored highly, only because of the increased sampling error in the small group. The FilmRank algorithm addresses this problem by using resampling to weigh the relative superiority of each film to every other, which can then produce more meaningful rankings using graph theory.
 
 This method is asymptotically equivalent to the naive ordering – in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. However, as a side effect, the relative ranking of two particular films becomes dependent on their relative rankings with all of the other films. For this reason, the ranking within a subgroup of films may end up slightly differing from their relative ranking in the context of all the films.
-}
-\examples{
-require(ggplot2movies)
-require(reshape2)
-require(FilmRank)
-set.seed(137)
-
-# get a subset of IMDb movies
-movies.subgroups <- movies$year == 2003 & movies$votes < 100 & movies$votes > 10 # make some cuts
-subsample.ix <- sample(1:sum(movies.subgroups), 60, replace = FALSE) # subsample 40 films
-movies.selection <- movies[movies.subgroups,][subsample.ix,]
-
-# reshape the genre columns
-movies.melt0 <- melt(movies.selection,
-                     id.vars = colnames(movies)[1:17],
-                     variable.name = "type",
-                     value.name = "type.yes")
-movies.melt <- movies.melt0[movies.melt0$type.yes == 1,]
-movies.unique <- do.call(rbind, lapply(split(movies.melt, movies.melt$title), function(x) x[1,]))
-
-# transform percentile vote columns r1-r10 into counts
-movies.unique[,c(7:16)] <- round(movies.unique[,c(7:16)]/rowSums(movies.unique[,c(7:16)]) * movies.unique$votes)
-
-# run FilmRank
-run <- filmrank(movies.unique,
-             title.colname = "title",
-             type.colname = "type",
-             vote.colnames = paste0("r", 1:10),
-             score = function(x) mean(x, trim = 0),
-             nboot = 100)
-summary(run)
-plot(run, rankmetric = "authority")
-plot(run, rankmetric = "mean")
-
 }

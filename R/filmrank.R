@@ -18,7 +18,7 @@
 #'
 #' This method is asymptotically equivalent to the naive ordering – in the limit where all audience sizes are large, they give the same results. However, when both large and small audiences are present, this method tends to favor scores from larger audiences, which is desirable. However, as a side effect, the relative ranking of two particular films becomes dependent on their relative rankings with all of the other films. For this reason, the ranking within a subgroup of films may end up slightly differing from their relative ranking in the context of all the films.
 #'
-#' @return an object of class \code{LAGFF}, which is a list with elements:
+#' @return an object of class \code{FilmRank}, which is a list with elements:
 #' \itemize{
 #'   \item \code{adj} : the adjacency matrix
 #'   \item \code{g} : an igraph graph object
