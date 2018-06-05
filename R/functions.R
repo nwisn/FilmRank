@@ -86,4 +86,3 @@ bootmeans2adjacency <- function(meanvotes.boot.list,
 
 
 
-
