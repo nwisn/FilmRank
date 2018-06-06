@@ -22,7 +22,7 @@ Below we show the change in rank (FilmRank compared to naive rank) for 1000 rand
 
 <center>
 
-![image](change_in_ranking_due_to_standard_error.png)
+![image](../../change_in_ranking_due_to_standard_error.png)
 
 </center>
 
