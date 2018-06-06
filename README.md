@@ -16,7 +16,7 @@ We wanted to design an algorithm that exhibits similar behavior, but without any
 
 
 ## How do the results compare?
-Like IMDb's method, FilmRank is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. Also like IMDb, when small audiences are present, FilmRank pushes them towards the median, exhibiting the qualitative behavior we aimed to achieve. The primary achievement is that FilmRank achieves this behavior nonparametrically, so that multiple users must get the same result. For a more detailed look, [see this notebook](https://nwisn.github.io/FilmRank/results_IMDb.html).
+Like IMDb's method, FilmRank is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. Also like IMDb, when small audiences are present, FilmRank pushes them towards the median, exhibiting the qualitative behavior we aimed to achieve. The primary achievement is that FilmRank achieves this behavior nonparametrically, so there is no longer room for subjectivity. For a more detailed look, [see this notebook](https://nwisn.github.io/FilmRank/results_IMDb.html).
 
 
 ## How do I use the algorithm?
