@@ -16,12 +16,7 @@ We wanted to design an algorithm that exhibits similar behavior, but without any
 
 
 ## How do the results compare?
-Like IMDb's method, FilmRank is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. Also like IMDb, when small audiences are present, FilmRank pushes them towards the median, exhibiting the qualitative behavior we aimed to achieve. The primary achievement is that FilmRank achieves this behavior nonparametrically, so there is no longer room for subjectivity. 
-
-Below we show the change in rank (FilmRank compared to naive rank) for 1000 random IMDb films as a function of the uncertainty (i.e. standard error) of their average score (which is inversely proportional to the audience size). Films that are ranked highly are negatively impacted by large uncertainty, while films that are ranked lowly are positively impacted; FilmRank pushes small films toward the median. For a more detailed examination, [see this notebook](https://nwisn.github.io/FilmRank/results_IMDb.html).
-
-
-![](https://nwisn.github.io/FilmRank/change_in_ranking_due_to_standard_error.png)
+Like IMDb's method, FilmRank is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. Also like IMDb, when small audiences are present, FilmRank pushes them towards the median, exhibiting the qualitative behavior we aimed to achieve. The primary achievement is that FilmRank achieves this behavior nonparametrically, so there is no longer room for subjectivity. For a more detailed examination, [see this notebook](https://nwisn.github.io/FilmRank/results_IMDb.html).
 
 
 ## How do I use the algorithm?
