@@ -56,7 +56,8 @@ filmrank <- function(csv,
     meanvotes.boot.list <- bootmeans(votes.list,
                                      FUN = score,
                                      nboot = nboot,
-                                     ncores = ncores)
+                                     ncores = ncores,
+                                     seed = seed)
 
     # turn probability film i>j into a graph and compute centrality scores
     a <- bootmeans2adjacency(meanvotes.boot.list, names = data[[title.colname]])
