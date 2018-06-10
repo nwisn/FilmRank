@@ -1,8 +1,3 @@
----
-markdown: kramdown
-mathjax: true
----
-
 
 ## Introduction
 
