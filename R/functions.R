@@ -43,10 +43,13 @@ data2longlist <- function(data,
 bootmeans <- function(votes.list,
                      FUN = mean,
                      nboot = 10000,
-                     ncores = NULL
+                     ncores = NULL,
+                     seed = NULL
                      ){
     require(parallel, quietly = T)
+    RNGkind("L'Ecuyer-CMRG")
     if(is.null(ncores)) ncores <- detectCores()-1
+    if(!is.null(seed)) set.seed(seed)
     meanvotes.boot.list <- mclapply(1:nboot, function(i){
         boot.votes.list <- lapply(votes.list, function(this_film){
             if(nboot > 1){
