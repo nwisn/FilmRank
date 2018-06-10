@@ -12,7 +12,7 @@ One possible solution lies in [the method IMDb uses](https://www.quora.com/What-
 
 
 ### 3. The FilmRank algorithm
-We wanted to design an algorithm that exhibits similar behavior, but without any free parameters. FilmRank accomplishes this nonparametrically, using resampling to estimate the probability of different rankings directly from the data. The FilmRank ranking algorithm bootstraps the probability that the average score \\(\hat{\mu_i}\\) of film \\(i\\) is greater than any other film \\(j\\), by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities \\(p_{ij}=p(\hat{\mu_j} \gt \hat{\mu_i})\\) is then treated as a weighted directed graph, and the [authority score](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908) \\(\text{eig}_1(p^Tp)\\) is used to rank the films, in a way similar to Google *page-rank*.
+We wanted to design an algorithm that exhibits similar behavior, but without any free parameters. FilmRank accomplishes this nonparametrically, using resampling to estimate the probability of different rankings directly from the data. The FilmRank ranking algorithm bootstraps the probability that the trimmed average score \\(\hat{\mu_i}\\) of film \\(i\\) is greater than any other film \\(j\\), by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities \\(p_{ij}=p(\hat{\mu_j} \gt \hat{\mu_i})\\) is then treated as a weighted directed graph, and the [authority score](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908) \\(\text{eig}_1(p^Tp)\\) is used to rank the films, in a way similar to Google *page-rank*.
 
 
 ## How do the results compare?
