@@ -1,5 +1,9 @@
 
+
+
 ## Introduction
+
+[See this vignette](https://nwisn.github.io/FilmRank/results_IMDb.html)
 
 Film festivals present an Audience Choice award to films based on the ranking of votes. The voting is typically a 5-star range system, where audience members can give a film an integer score between 1 and 5. An algorithm is then used to rank the films. But what's a good algorithm to use?
 
