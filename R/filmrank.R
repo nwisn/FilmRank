@@ -76,6 +76,10 @@ filmrank <- function(csv,
     data[["mean.upper"]] <- meanvotes.boot.CI[2,]
     data[["stderror"]] <- meanvotes.boot.se
 
+    # include empirical bayes estimates
+    data[["james.stein"]] <- estimate.jamesstein(data[["mean"]], data[["stderror"]])
+    data[["ashr"]] <- estimate.adaptiveshrinkage(data[["mean"]], data[["stderror"]])
+
     ret <- list(adj = a,
                 graph = g,
                 data = data,

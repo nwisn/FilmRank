@@ -88,4 +88,17 @@ bootmeans2adjacency <- function(meanvotes.boot.list,
 
 
 
+# compute James-Stein estimate of mean
+estimate.jamesstein <- function(x,s){
+  xbar <- mean(x)
+  c <- 1 - ((length(x)-3)*s^2) / sum((x-xbar)^2)
+  cc <- unlist(lapply(c, function(this_c) max(this_c,0))) # correction Stanley Sclove
+  z <- xbar + cc*(x-xbar)
+  return(z)
+}
 
+estimate.adaptiveshrinkage <- function(means, stderrs){
+  require(ashr, quietly = T)
+  result.ash <- suppressMessages(ash(means, stderrs, method = "shrink", mode="estimate"))
+  return(result.ash$result$PosteriorMean)
+}
