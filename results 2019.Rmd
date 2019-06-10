@@ -1,0 +1,281 @@
+---
+title: "LAGFF 2019"
+date: June 9, 2019
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    collapsed: true
+    number_sections: false
+    theme: cosmo
+    df_print: paged
+    
+    
+---
+<script>
+$(document).ready(function() {
+$('#TOC').parent().prepend('<div id=\"nav_logo\"><img src=\"http://lagff.org/wp-content/uploads/lagff_logo_home.png"></div>');
+});
+</script>
+
+<style>
+#nav_logo {
+width: 100%;
+margin-top: 40px;
+}
+</style>
+
+
+The [Los Angeles Greek Film Festival](http://lagff.org/) (LAGFF) presents an Audience Choice award to films based on the ranking of votes. The voting is a 5-star range system, where audience members can give a film an integer score between 1 and 5. An [authority score](#algorithm) is then used to rank the films. Below are the results for 2019.
+
+```{r libraries, echo = F, warning=F}
+suppressMessages(require(FilmRank))
+suppressMessages(require(knitr))
+suppressMessages(require(kableExtra))
+suppressMessages(require(ggsci))
+#suppressMessages(source(file.path("~/Documents/LAGFF/R", "lagff.R")))
+```
+
+
+```{r header, echo = F, warning=F}
+#______________________________________
+# dataset
+#csv.name <- file.path("../", "data", "2018_final.csv")
+csv.name <- file.path("~/Downloads/2019 Screening Attendance and Ballots - Sheet1-5.csv")
+csv <- read.csv(csv.name, header=T)
+
+# initialize variables
+title.colname <- "FILM"
+type.colname <- "TYPE" # if not recorded, will create automatically
+vote.colnames <- make.names(c("1","2","3","4","5"))
+score = function(x) mean(x, trim = .05)
+nboot <- 20000
+minvote <- 6
+```
+
+
+```{r run, echo = F, warning=F}
+#______________________________________
+# run analysis
+run <- suppressWarnings(suppressMessages(filmrank(csv,
+                                               title.colname = title.colname,
+                                               type.colname = type.colname,
+                                               vote.colnames = vote.colnames,
+                                               score = score,
+                                               nboot = nboot,
+                                               minvote = minvote,
+                                               seed = 137,
+                                               ncores = NULL)
+))
+```
+
+# Results {.tabset .tabset-pills .tabset-fade}
+
+We ranked 3 TYPEs of films: Documentary (DOC), Feature (FEA), and Short (SHO); each is shown in a different color. The average vote is shown in the column labeled AVG, The number of total votes is shown in the column labeled VOTES. The authority score is shown in the column labeled AUTHORITY, and is used to determine the ranking. Note: the rankings within a subgroup of films may be slightly different than the order in the overall rankings (see [algorithm](#algorithm)).
+
+## Overall
+
+```{r overall, echo=F, warning=F}
+#______________________________________
+# plots
+get_colnames <- c("FILM", "TYPE", "Total", "mean","james.stein", "ashr", "authority" )
+show_colnames <- c("FILM","TYPE", "VOTES", "AVG","J-S", "ASHR", "AUTHORITY")
+this_table <- run$data[order(run$data$authority, decreasing = T),
+                       get_colnames]
+rownames(this_table) <- as.character(1:nrow(this_table))
+
+kable(this_table, 
+      digits = 3,
+      row.names = T, 
+      col.names = show_colnames,
+      caption = "Overall Rankings") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                  font_size = 14) %>%
+    row_spec(which(this_table$TYPE == "FEA"), bold = F, color = "#CE3D32FF") %>%
+    row_spec(which(this_table$TYPE == "DOC"), bold = F, color = "#5050FFFF") %>%
+    row_spec(which(this_table$TYPE == "SHO"), bold = F, color = "#749B58FF") %>%
+    scroll_box(width = "100%", height = "300px")
+```
+
+
+
+```{r subgraphs, echo=F, eval = T, warning=F}
+# split graph into subgraphs for different film types
+filmtypes <- levels(factor(run$data[[type.colname]]))
+if(length(filmtypes) > 1){
+    g <- run$g
+    subgraphs <- sapply(filmtypes, function(this_type) induced_subgraph(g, v=which(V(g)$type %in% this_type)), simplify=F)
+    
+    # get subgraph scores
+    subgraphs.authority <- lapply(subgraphs, function(this_g) authority.score(this_g)$vector)
+    filmtypes.ix <- lapply(subgraphs.authority, function(this_subhub) match(names(this_subhub), V(g)$name))
+    data.sub <- run$data
+    data.sub[["authority"]][unlist(filmtypes.ix)] <- unlist(subgraphs.authority)
+    data.subs <- split(data.sub, factor(data.sub[[type.colname]]))
+} else {
+    data.subs <- NULL
+}
+
+
+```
+
+## Feature Films
+
+```{r features, echo = F, warning=F}
+# plot filmtype-specific rankings
+if(is.null(data.subs)){
+    print("This category is not listed.")
+} else if("FEA" %in% names(data.subs)){
+    this_table <- data.subs[["FEA"]][order(data.subs[["FEA"]]$authority, decreasing = T),
+                                  get_colnames]
+    rownames(this_table) <- as.character(1:nrow(this_table))
+    
+    kable(this_table, 
+          digits = 3,
+          row.names = T, 
+          col.names = show_colnames,
+          caption = "Feature Film Rankings") %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                      font_size = 14) %>%
+        row_spec(which(this_table$TYPE == "FEA"), bold = F, color = "#CE3D32FF") %>%
+        row_spec(which(this_table$TYPE == "DOC"), bold = F, color = "#5050FFFF") %>%
+        row_spec(which(this_table$TYPE == "SHO"), bold = F, color = "#749B58FF") %>%
+        scroll_box(width = "100%", height = "300px")
+}
+
+```
+
+## Documentaries
+
+```{r docs, echo = F, warning=F}
+if(is.null(data.subs)){
+    print("This category is not listed.")
+} else if("DOC" %in% names(data.subs)){
+    this_table <- data.subs[["DOC"]][order(data.subs[["DOC"]]$authority, decreasing = T),
+                                   get_colnames]
+    rownames(this_table) <- as.character(1:nrow(this_table))
+    
+    kable(this_table, 
+          digits = 3,
+          row.names = T, 
+          col.names = show_colnames,
+          caption = "Documentary Rankings") %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                      font_size = 14) %>%
+        row_spec(which(this_table$TYPE == "FEA"), bold = F, color = "#CE3D32FF") %>%
+        row_spec(which(this_table$TYPE == "DOC"), bold = F, color = "#5050FFFF") %>%
+        row_spec(which(this_table$TYPE == "SHO"), bold = F, color = "#749B58FF") %>%
+        scroll_box(width = "100%", height = "300px")
+}
+```
+
+## Shorts
+
+```{r shorts, echo = F, warning=F}
+if(is.null(data.subs)){
+    print("This category is not listed.")
+} else if("SHO" %in% names(data.subs)){
+    this_table <- data.subs[["SHO"]][order(data.subs[["SHO"]]$authority, decreasing = T),
+                                   get_colnames]
+    rownames(this_table) <- as.character(1:nrow(this_table))
+    
+    kable(this_table, 
+          digits = 3,
+          row.names = T, 
+          col.names = show_colnames,
+          caption = "Short Film Rankings") %>%
+        kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                      font_size = 14) %>%
+        row_spec(which(this_table$TYPE == "FEA"), bold = F, color = "#CE3D32FF") %>%
+        row_spec(which(this_table$TYPE == "DOC"), bold = F, color = "#5050FFFF") %>%
+        row_spec(which(this_table$TYPE == "SHO"), bold = F, color = "#749B58FF") %>%
+        scroll_box(width = "100%", height = "300px")
+}
+```
+
+# Visualization
+
+We visualized the ranking system using a forest plot. The average vote is depicted by a square and a 95% confidence interval. The number of total votes is depicted by the size of the squares. The authority score is used to determine the ranking
+
+```{r forestplot, echo = F, fig.height = 9, fig_retina=2, warning=F }
+# plot overall ranking
+suppressMessages(
+    plot(run,
+         rankmetric = "authority",
+         color.palette = pal_igv,
+         cex.label = 0.75,
+         xlim = c(1,5),
+         cex.xlab = 1,
+         cex.ticks = 0.75,
+         boxsize = 1/500,
+         new_page = T,
+         title = "")
+)
+```
+
+# Empirical Bayes
+
+## Rank Correlation
+
+We compared the rankings based on the authority score, mean, James-Stein estimate, and adaptive shrinkage. The rank correlations are:
+
+```{r, echo = F, warning=F }
+
+metrics <- run$data[,c("degree", "authority", "mean", "james.stein", "ashr")]
+r <-cor(metrics, method = "s") 
+as.data.frame(r)
+```
+
+## Ranking
+
+and the ranking is as follows:
+
+```{r, echo = F, warning=F }
+
+this_table <- run$data[order(run$data$ash, decreasing = T),get_colnames]
+rownames(this_table) <- as.character(1:nrow(this_table))
+
+kable(this_table, 
+      digits = 3,
+      row.names = T, 
+      col.names = show_colnames,
+      caption = "Overall Rankings by ASHR") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                  font_size = 14) %>%
+    row_spec(which(this_table$TYPE == "FEA"), bold = F, color = "#CE3D32FF") %>%
+    row_spec(which(this_table$TYPE == "DOC"), bold = F, color = "#5050FFFF") %>%
+    row_spec(which(this_table$TYPE == "SHO"), bold = F, color = "#749B58FF") %>%
+    scroll_box(width = "100%", height = "300px")
+```
+
+## Visualization
+
+```{r, echo = F, fig.height = 9, fig_retina=2, warning=F}
+plot(run,
+         rankmetric = "ashr",
+         color.palette = pal_igv,
+         cex.label = 0.75,
+         xlim = c(1,5),
+         cex.xlab = 1,
+         cex.ticks = 0.75,
+         boxsize = 1/500,
+         new_page = T,
+         title = "ASHR Ranking")
+```
+
+
+
+# About the Ranking Algorithm {#algorithm}
+
+The FilmRank ranking algorithm bootstraps the probability that the 5% trimmed average score $\hat{\mu_i}$ of film $i$ is greater than any other film $j$, by resampling the votes to simulate the universe of all possible rankings. This matrix of probabilities $p_{ij}=p(\hat{\mu_j} \gt \hat{\mu_i})$ is then treated as a weighted directed graph, and the [authority score](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908) $\text{eig}_1(p^Tp)$ is used to rank the films, in a way similar to Google *page-rank*. 
+
+
+### Why this algorithm?
+This ranking system was adopted by LAGFF to address a problem in estimating ranks introduced by the wide range of audience sizes at a film festival. Specifically, ranking based on naive ordering the mean scores can produce undesirable results. For example, a high scoring film that many people came to see (opening/closing night) can sometimes be beaten by a film that very few people came to see, but which also scored highly, only because of the increased sampling error in the small group. The LAGFF algorithm addresses this problem by using resampling to weigh the relative superiority of each film to every other, which can then produce more meaningful rankings using graph theory. 
+
+### How are the results different?
+This method is asymptotically equivalent to the naive ordering -- in the limit where all audience sizes are large, they give the same results. However, when small audiences are present, this method tends to favor scores from larger audiences, which is desirable. For a more detailed examination, visit the [source page](https://nickwisniewski.com/FilmRank) and [see this notebook](https://nickwisniewski.com/FilmRank/results_IMDb.html).
+
+# References
+[[1](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.418.3908)] Kleinberg, J. M. (1999). Authoritative sources in a hyperlinked environment. *Journal of the ACM (JACM)*, 46(5), 604-632.
